@@ -72,7 +72,7 @@ export default function Navbar() {
             </div>
 
             {/* Desktop Actions */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-2">
               <ConnectBtn />
               <Button onClick={() => push("/create")} className="text-md text-white">
                 Create Token
@@ -81,14 +81,14 @@ export default function Navbar() {
                 <img
                   src="/lan.png"
                   alt="Language"
-                  className="h-8 cursor-pointer"
+                  className="w-8 h-8 cursor-pointer"
                   onClick={toggleLang}
                 />
 
                 {langOpen && (
                   <div
                     ref={langRef}
-                    className="fixed top-16 right-0 w-40 bg-[#1C1F2F]/95 p-2 rounded shadow-lg z-50"
+                    className="fixed top-16 right-0 bg-[#1C1F2F]/95 p-2 rounded shadow-lg z-50"
                     onClick={(e) => e.stopPropagation()}
                   >
                     {["English", "中文", "日本語", "Tiếng Việt"].map((lang, index) => (
