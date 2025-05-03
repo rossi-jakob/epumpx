@@ -68,7 +68,7 @@ export function TokenCarousel({
         onMouseLeave={() => {
           const containerWidth = containerRef.current?.scrollWidth! / 2;
 
-          const duration = speed * currentX.current / containerWidth;
+          const duration = (30 * (tokens.length / 20 + 1)) * currentX.current / containerWidth;
 
           controls.start({
             x: direction === "ltr" ? -containerWidth : 0,
