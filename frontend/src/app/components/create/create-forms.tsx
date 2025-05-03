@@ -7,7 +7,6 @@ import { ImageUpload } from "./image-upload";
 import { RaisedToken } from "./raised-token";
 import { Label } from "@/components/ui/label";
 import CreateTokenDailog from "./create-dailog";
-import { ConnectBtn } from "@/components/ui/button";
 
 import { toast } from "react-toastify";
 import Config from "../../config/config"
@@ -47,10 +46,12 @@ export const CreateForms = () => {
 
   const router = useRouter()
   const account = useAccount();
+  const { isConnected, address } = useAccount();
   const config = useConfig()
 
-  const {data} = useBalance({ address: `0x${account.address}`, 
-                              })
+  const { data } = useBalance({
+    address: `0x${account.address}`,
+  })
   console.log("balance data===================", data);
 
   const { openConnectModal } = useConnectModal();
@@ -64,7 +65,7 @@ export const CreateForms = () => {
     }
 
     setPending(true)
-    
+
     try {
       const formData = new FormData()
       formData.append('image', logo)
@@ -187,11 +188,11 @@ export const CreateForms = () => {
     setAddToken(false)
     setPending(false)
     setIsOpen(false)
-  } 
+  }
 
   const onImageUploaded = (imageUrl: string) => {
     setLogo(imageUrl);
-    console.log("Image uploaded and URL received in parent:", imageUrl);    
+    console.log("Image uploaded and URL received in parent:", imageUrl);
   };
 
   return (
@@ -292,17 +293,26 @@ export const CreateForms = () => {
         </div> */}
 
         {/* Connect Wallet Button */}
-        {/* <div className="flex justify-center ">
+        <div className="hidden md: block flex justify-center ">
           <Button
             className="px-8 py-3 font-bold font-md text-white"
-            onClick={() => account.isConnected? setIsOpen(true) : onWalletConnect()}
+            onClick={() => account.isConnected ? setIsOpen(true) : onWalletConnect()}
           >
-            {account.isConnected?
+            {account.isConnected ?
               "Create Token" :
               "Connect Wallet"}
           </Button>
-        </div> */}
-        <ConnectBtn />
+        </div>
+
+        <div className="md:hidden flex justify-center ">
+          <Button
+            className="px-8 py-3 font-bold font-md text-white"
+            onClick={() => setIsOpen(true)}
+            disabled={!isConnected}
+          >
+            Create Token
+          </Button>
+        </div>
       </div>
     </div>
   );

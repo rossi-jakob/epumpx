@@ -164,7 +164,11 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               push("/create");
             }}
-            className="block nav-link text-left w-full"
+            disabled={!isConnected}
+            className={cn(
+              "block nav-link text-left w-full",
+              !isConnected && "opacity-50 cursor-not-allowed"
+            )}
           >
             Create Token
           </button>
