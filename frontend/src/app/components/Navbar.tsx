@@ -147,7 +147,7 @@ export default function Navbar() {
               <img
                   src="/lan.png"
                   alt="Language"
-                  className="w-6 h-6 cursor-pointer"
+                  className="w-5 h-5 cursor-pointer"
                   onClick={toggleLang}
                 />
             </div>
