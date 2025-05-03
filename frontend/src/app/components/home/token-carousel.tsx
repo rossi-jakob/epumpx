@@ -17,7 +17,7 @@ export function TokenCarousel({
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  const speed = (30 * (tokens.length / 20 + 1));  
+  const speed = (30 * (tokens.length / 20 + 1));
 
   useEffect(() => {
     const startAnimation = async () => {
@@ -68,6 +68,8 @@ export function TokenCarousel({
         onMouseLeave={() => {
           const containerWidth = containerRef.current?.scrollWidth! / 2;
 
+          const duration = speed * currentX.current / containerWidth;
+
           controls.start({
             x: direction === "ltr" ? -containerWidth : 0,
             from: currentX.current,
@@ -75,7 +77,7 @@ export function TokenCarousel({
               repeat: Infinity,
               repeatType: "loop",
               ease: "linear",
-              duration: speed,
+              duration: duration,
               onUpdate: (latest: any) => {
                 currentX.current = latest;
                 if (
