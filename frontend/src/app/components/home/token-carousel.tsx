@@ -67,9 +67,7 @@ export function TokenCarousel({
         onMouseEnter={() => controls.stop()}
         onMouseLeave={() => {
           const containerWidth = containerRef.current?.scrollWidth! / 2;
-
-          const duration = (30 * (tokens.length / 20 + 1)) * currentX.current / containerWidth;
-
+        
           controls.start({
             x: direction === "ltr" ? -containerWidth : 0,
             from: currentX.current,
@@ -77,7 +75,7 @@ export function TokenCarousel({
               repeat: Infinity,
               repeatType: "loop",
               ease: "linear",
-              duration: duration,
+              duration: speed, // Use the same fixed duration
               onUpdate: (latest: any) => {
                 currentX.current = latest;
                 if (
