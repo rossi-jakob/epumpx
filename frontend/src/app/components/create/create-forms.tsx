@@ -293,14 +293,12 @@ export const CreateForms = () => {
         </div> */}
 
         {/* Connect Wallet Button */}
-        <div className="hidden md: block flex justify-center ">
+        <div className="hidden md:flex justify-center">
           <Button
-            className="px-8 py-3 font-bold font-md text-white"
+            className="px-8 py-3 font-bold text-white"
             onClick={() => account.isConnected ? setIsOpen(true) : onWalletConnect()}
           >
-            {account.isConnected ?
-              "Create Token" :
-              "Connect Wallet"}
+            {account.isConnected ? "Create Token" : "Connect Wallet"}
           </Button>
         </div>
 
