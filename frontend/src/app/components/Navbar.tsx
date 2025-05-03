@@ -8,11 +8,11 @@ import Link from "next/link";
 import { IoMenu } from "react-icons/io5";
 import { useConnect, useDisconnect, useAccount } from "wagmi";
 import { injected } from '@wagmi/connectors'
+import { ConnectWalletIcon, DisconnectWalletIcon } from "@/components/ui/walletIcon";
 
 export default function Navbar() {
   const { push } = useRouter();
-  const [navOpen, setNavOpen] = useState(false);
-  const [actionOpen, setActionOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [selectedLang, setSelectedLang] = useState("English");
   const navRef = useRef<HTMLDivElement>(null);
@@ -26,8 +26,8 @@ export default function Navbar() {
         !actionRef.current?.contains(event.target as Node) &&
         !langRef.current?.contains(event.target as Node)
       ) {
-        setNavOpen(false);
-        setActionOpen(false);
+        setMobileMenuOpen(false);
+        setLangOpen(false);
       }
     };
 
@@ -37,23 +37,10 @@ export default function Navbar() {
     };
   }, []);
 
-  const toggleNav = (e: React.MouseEvent) => {
-    e.stopPropagation(); // prevent from bubbling to document
-    if (actionOpen) setActionOpen(false);
-    setNavOpen(!navOpen);
-  };
-
-  const toggleAction = (e: React.MouseEvent) => {
-    e.stopPropagation(); // prevent from bubbling to document
-    if (navOpen) setNavOpen(false);
-    setActionOpen(!actionOpen);
-  };
-
   const toggleLang = (e: React.MouseEvent) => {
     e.stopPropagation();
     setLangOpen(!langOpen);
-    setNavOpen(false);
-    setActionOpen(false);
+    setMobileMenuOpen(false);
   };
 
   const { connect, isPending } = useConnect();
@@ -114,55 +101,76 @@ export default function Navbar() {
                         }}
                       >
                         <span>{lang}</span>
-                        {selectedLang === lang && <span className="text-green-400">✓</span>}
+                        {selectedLang === lang && <span className="text-[#8346FF] font-bold">✓</span>}
                       </button>
                     ))}
                   </div>
                 )}
               </div>
             </div>
+            {/* language options */}
+            {langOpen && (
+              <div
+                ref={langRef}
+                className="fixed top-16 right-0 w-40 bg-[#1C1F2F]/95 p-2 rounded shadow-lg z-50"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {["English", "中文", "日本語", "Tiếng Việt"].map((lang, index) => (
+                  <button
+                    key={index}
+                    className="flex justify-between items-center w-full text-left px-2 py-1 hover:bg-[#2C2F40] text-white text-sm"
+                    onClick={() => {
+                      setSelectedLang(lang);
+                      setLangOpen(false);
+                    }}
+                  >
+                    <span>{lang}</span>
+                    {selectedLang === lang && (
+                      <span className="text-[#8346FF] font-bold">✓</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
 
-            {/* Mobile Toggles */}
-            <div className="flex md:hidden items-center space-x-2">
-              <button onClick={(e) => toggleNav(e)}><IoMenu size={24} /></button>
-              <button onClick={(e) => toggleAction(e)}><IoMenu size={24} /></button>
+            <div className="flex md:hidden items-center gap-2">
+              {/* Mobile Toggles */}
+              <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                <IoMenu size={24} style={{ color: '#8346FF' }} />
+              </button>
+
+              {/* Mobile Wallet Action */}
+              <button className="md:hidden" onClick={isConnected ? () => disconnect() : () => connect({ connector: injected() })}>
+                {isConnected ? <DisconnectWalletIcon /> : <ConnectWalletIcon />}
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile Nav Dropdown */}
-      {navOpen && (
-        <div ref={navRef} onClick={(e) => toggleNav(e)} className="absolute top-16 right-0 w-1/2 bg-[#1C1F2F]/95 p-4 space-y-2 z-50 shadow-lg">
+      {mobileMenuOpen && (
+        <div
+          ref={navRef}
+          className="absolute top-16 right-4 bg-[#1C1F2F]/95 px-4 py-3 space-y-3 z-50 shadow-lg rounded min-w-max"
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          {/* Nav Links */}
           <Link href="/" className="block nav-link">Board</Link>
           <Link href="/ranking" className="block nav-link">Ranking</Link>
+
+          {/* Create Token */}
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              push("/create");
+            }}
+            className="block nav-link text-left w-full"
+          >
+            Create Token
+          </button>
         </div>
       )}
 
-      {/* Mobile Action Dropdown */}
-      {actionOpen && (
-        <div ref={actionRef} onClick={(e) => toggleAction(e)} className="absolute top-16 right-0 w-1/2 bg-[#1C1F2F]/95 p-4 space-y-2 z-50 shadow-lg">
-          {isConnected ? (
-            <Button
-              onClick={() => disconnect()}
-              className="w-full text-md text-white"
-            >
-              Disconnect
-            </Button>
-          ) : (
-            <Button
-              onClick={() => connect({ connector: injected() })}
-              disabled={isPending}
-              className="w-full text-md text-white"
-            >
-              {isPending ? 'Connecting...' : 'Connect Wallet'}
-            </Button>
-          )}
-          <Button onClick={() => push("/create")} className="w-full text-md text-white">
-            Create Token
-          </Button>
-        </div>
-      )}
     </nav>
   );
 }

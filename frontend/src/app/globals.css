@@ -208,14 +208,10 @@ body {
   margin: 10px;
 }
 
-.card-scale {
-
-  
-
-  &:hover {
-
-  }
+.nav-link {
+  @apply text-white hover:text-[#8346FF] transition-colors duration-150;
 }
+
 
 /* For Firefox */
   
