@@ -143,6 +143,13 @@ export default function Navbar() {
               <button className="md:hidden" onClick={isConnected ? () => disconnect() : () => connect({ connector: injected() })}>
                 {isConnected ? <DisconnectWalletIcon /> : <ConnectWalletIcon />}
               </button>
+
+              <img
+                  src="/lan.png"
+                  alt="Language"
+                  className="w-6 h-6 cursor-pointer"
+                  onClick={toggleLang}
+                />
             </div>
           </div>
         </div>
